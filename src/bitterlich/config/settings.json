@@ -1,0 +1,5 @@
+{
+    "password_filepath": "./password.ini", 
+    "password_iteration": 100000,
+    "password_rotation": true
+}
