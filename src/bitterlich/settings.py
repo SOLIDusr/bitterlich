@@ -10,8 +10,7 @@ else:
 
 GLOBAL_SETTINGS_TEMPLATE = {
     "password_filepath": "./password.ini", 
-    "password_iteration": 100000,
-    "password_rotation": True
+    "password_iteration": 100000
 }
 
 def init_global_settings():

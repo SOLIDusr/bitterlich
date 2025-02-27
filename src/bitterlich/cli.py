@@ -60,13 +60,13 @@ def add(filename, password, key, value, verbose):
     vault_data[key] = value
     settings = get_global_settings()
     try:
-        write_vault(vault_file, vault_data, password_file, rotate_password=settings.get('password_rotation', False))
+        write_vault(vault_file, vault_data, password_file)
         logger.info("Key added/updated successfully.", "cli")
         click.echo("Key added/updated successfully.")
     except Exception as e:
         logger.error(f"Failed to write vault: {e}", "cli")
         click.echo("Failed to update vault. Check your password file or settings.")
-
+    
 @cli.command("generate-password")
 @click.option('-l', '--length', prompt='Password length (4-26)', type=click.IntRange(4, 26), required=True, help='Length of the generated password')
 def generate_password_cmd(length):

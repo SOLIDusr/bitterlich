@@ -41,25 +41,15 @@ def read_vault(vault_file: str, password_file: str) -> dict:
     decrypted = decrypt_vault(ciphertext, password_file)
     return json.loads(decrypted.decode('utf-8'))
 
-def write_vault(vault_file: str, vault_data: dict, password_file: str, rotate_password: bool = False) -> None:
+def write_vault(vault_file: str, vault_data: dict, password_file: str) -> None:
     """
     Encrypts and writes the vault data back to the vault file.
-    If password rotation is enabled, the password file is replaced.
     """
     data = json.dumps(vault_data).encode('utf-8')
     settings = get_global_settings()
-    if rotate_password and settings.get('password_rotation', False):
-        try:
-            os.remove(password_file)
-        except FileNotFoundError:
-            pass
-        new_ciphertext = encrypt_vault(data, None)
-        with open(vault_file, "wb") as f:
-            f.write(new_ciphertext)
-    else:
-        ciphertext = encrypt_vault(data, password_file)
-        with open(vault_file, "wb") as f:
-            f.write(ciphertext)
+    ciphertext = encrypt_vault(data, password_file)
+    with open(vault_file, "wb") as f:
+        f.write(ciphertext)
 
 def create_vault(vault_file: str, password_file: str) -> None:
     """
