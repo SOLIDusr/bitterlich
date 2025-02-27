@@ -11,7 +11,7 @@ setup(
     install_requires=[
         'click',
         'cryptography',
-        'configparser'
+        'pyperclip'
     ],
     entry_points={
         'console_scripts': [

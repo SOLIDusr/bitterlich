@@ -5,8 +5,11 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from .generate import generate_password
 from ..utils.loggerHandler import LoggerInstance
+from ..settings import get_global_settings
+
 
 logger = LoggerInstance()
+settings = get_global_settings()
 
 def encrypt(data: bytes, password: bytes, salt: bytes, nonce: bytes) -> bytes:
     """Encrypts data using AES GCM after deriving a 256-bit key via PBKDF2HMAC."""
@@ -14,7 +17,7 @@ def encrypt(data: bytes, password: bytes, salt: bytes, nonce: bytes) -> bytes:
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=100000,
+        iterations=settings.get('password_iteration', 100000),
         backend=default_backend()
     )
     key = kdf.derive(password)
@@ -28,7 +31,7 @@ def decrypt(data: bytes, password: bytes, salt: bytes, nonce: bytes) -> bytes:
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=100000,
+        iterations=settings.get('password_iteration', 100000),
         backend=default_backend()
     )
     key = kdf.derive(password)

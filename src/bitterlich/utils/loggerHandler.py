@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 import os
+import sys
 
 
 class SingletonMeta(type):
@@ -14,11 +15,11 @@ class SingletonMeta(type):
 class LoggerInstance(metaclass=SingletonMeta):
     def __init__(self, verbose: bool = False):
         console_level = logging.INFO if verbose else logging.ERROR
-        logs_dir = "src/bitterlich/logs"
+        if sys.platform == "win32":
+            logs_dir = os.path.join(os.getenv('APPDATA'), 'bitterlich', 'logs')
+        else:
+            logs_dir = os.path.expanduser('~/.config/bitterlich/logs')
         os.makedirs(logs_dir, exist_ok=True)
-
-        for filename in os.listdir(logs_dir):
-            os.remove(os.path.join(logs_dir, filename))
 
         self._logger = logging.getLogger("Debug")
         self._logger.setLevel(logging.DEBUG)
